@@ -1,7 +1,33 @@
 # Radeon Open Compute Tradecraft
-This is a collection of Radeon Open Compute (ROCm) commnds, best practices and what not that will make you more confident with the AMD ROCm toolkit. And assist in transitioning from CUDA, over to a community driven parallel programming ecoystem you have control over. 
 
-Welcome to the future folks...lets get started.
+This guide is designed for engineers and developers seeking to migrate from Nvidia's CUDA to the open, community-driven environment provided by AMD's Radeon Open Compute (ROCm). It offers a comprehensive collection of ROCm commands, best practices, and performance tuning techniques to help you become proficient with the AMD ROCm toolkit.
+
+### Advanced Computational Infrastructure Engineering -- For Everyone
+
+As the demand for high-performance computing continues to grow, many engineers are looking for alternatives to proprietary solutions like CUDA. ROCm provides an open ecosystem that empowers developers with greater control over their parallel programming environments. This guide aims to facilitate your transition by covering essential topics such as:
+
+| Topic                                      | Description                                                                                                   |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| **System Setup and Installation**          | Step-by-step instructions to get ROCm up and running on your hardware.                                        |
+| **ROCm Component Packages**                | Detailed descriptions of key ROCm packages and their components.                                              |
+| **Monitoring and Managing GPU Usage**      | Tools and commands to monitor GPU utilization, temperature, power consumption, and more.                      |
+| **GPU Performance Tuning**                 | Techniques to optimize GPU performance, including setting power profiles, fan speeds, and clock frequencies.  |
+| **Diagnostics and Debugging**              | Methods to check GPU health, reset GPUs, and manage logs.                                                     |
+| **GPU Memory Management**                  | Commands to check and clear GPU memory usage.                                                                 |
+| **Advanced GPU Configuration**             | Tips for overclocking, underclocking, and setting power caps on GPUs.                                         |
+| **ROCm-SMI Commands Summary**              | A comprehensive summary of ROCm System Management Interface commands.                                         |
+| **Development Tools**                      | Instructions for installing and using HIP, ROCm's Heterogeneous-Computing Interface for Portability.          |
+| **Performance Tuning and Benchmarking**    | Guides to installing and running performance tests using ROCm tools like rocprof and rocminfo.                |
+| **RoCE and GPU Network Fabrics**           | Steps to set up and manage RDMA over Converged Ethernet for high-bandwidth GPU communication.                 |
+| **Performance and Benchmarking Cookbook**  | Practical recipes for benchmarking and optimizing ROCm, RDMA, and RoCE performance.                           |
+
+### Why Choose ROCm?
+
+- **Open Ecosystem**: Enjoy the freedom and flexibility of an open-source platform with a vibrant community of contributors.
+- **Control and Customization**: Gain granular control over your parallel programming environment, allowing for custom optimizations and enhancements.
+- **Future-Ready**: Leverage cutting-edge technologies and stay ahead in the rapidly evolving field of high-performance computing.
+
+Welcome to the future of parallel programming. Let's get started with ROCm and unlock the full potential of your hardware!
 
 ## Table of Contents
 
