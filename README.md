@@ -254,28 +254,28 @@ sudo /opt/rocm/bin/rocm-smi --setperflevel high --device 0
 ### Diagnostics and Debugging
 
 **Checking GPU Health:**
-
 ```bash
 /opt/rocm/bin/rocm-smi --showhealth
 ```
+- **Summary:** This command is used to display the health status of the GPU. It provides information on various health metrics such as temperature, fan speed, power consumption, and more.
 
 **Resetting GPU:**
-
 ```bash
 sudo /opt/rocm/bin/rocm-smi --reset
 ```
+- **Summary:** This command resets the GPU. It can be useful for troubleshooting and resolving issues related to the GPU by restarting its state.
 
 **Saving GPU Logs:**
-
 ```bash
 /opt/rocm/bin/rocm-smi --save log.txt
 ```
+- **Summary:** This command saves the current GPU logs to a specified file (in this case, `log.txt`). These logs can be used for diagnostics and analyzing the performance and issues of the GPU.
 
 **Clearing GPU Logs:**
-
 ```bash
 sudo /opt/rocm/bin/rocm-smi --clearlog
 ```
+- **Summary:** This command clears the GPU logs. It can help in managing disk space and removing old log data that is no longer needed for analysis.
 
 ### GPU Memory Management
 
@@ -284,12 +284,14 @@ sudo /opt/rocm/bin/rocm-smi --clearlog
 ```bash
 /opt/rocm/bin/rocm-smi --showmemuse
 ```
+- **Summary:** This command displays the current GPU memory usage, helping you monitor the memory allocation and identify any potential memory bottlenecks.
 
 **Clearing GPU Memory:**
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --clearmem
 ```
+- **Summary:** This command clears the GPU memory, which can be useful for freeing up memory resources and resolving memory-related issues.
 
 ### Advanced GPU Configuration
 
@@ -298,18 +300,21 @@ sudo /opt/rocm/bin/rocm-smi --clearmem
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setsclkoc 1700 --device 0
 ```
+- **Summary:** This command overclocks the GPU to a specified frequency (1700 MHz in this case), potentially improving performance but also increasing power consumption and heat.
 
 **Underclocking GPU:**
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setsclkoc 1400 --device 0
 ```
+- **Summary:** This command underclocks the GPU to a specified frequency (1400 MHz in this case), reducing power consumption and heat, which may be beneficial for stability and longevity.
 
 **Setting Power Cap:**
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 ```
+- **Summary:** This command sets a power cap (200W in this case) on the GPU, limiting its maximum power consumption to control thermal output and power usage.
 
 ### ROCm-SMI Commands Summary
 
@@ -319,6 +324,7 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --showhw
 /opt/rocm/bin/rocm-smi --showallinfo
 ```
+- **Summary:** These commands provide detailed hardware information and all available information about the GPU, respectively, helping in understanding the system's configuration and capabilities.
 
 **Temperature and Fan:**
 
@@ -327,6 +333,7 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --showfan
 /opt/rocm/bin/rocm-smi --setfan <percentage> --device <device_id>
 ```
+- **Summary:** These commands display the GPU temperature and fan speed, and allow setting the fan speed to a specific percentage, useful for thermal management.
 
 **Power and Performance:**
 
@@ -335,6 +342,7 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --setperflevel <level> --device <device_id>
 /opt/rocm/bin/rocm-smi --setpoweroverdrive <value> --device <device_id>
 ```
+- **Summary:** These commands display power consumption, set performance levels, and configure power overdrive settings, crucial for optimizing power efficiency and performance.
 
 **Clock Speeds:**
 
@@ -344,6 +352,7 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --setmclk <value> --device <device_id>
 /opt/rocm/bin/rocm-smi --setsclkoc <value> --device <device_id>
 ```
+- **Summary:** These commands show and set the GPU's clock speeds, including overclocking and underclocking, to adjust performance and power consumption.
 
 **Memory:**
 
@@ -351,6 +360,7 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --showmemuse
 /opt/rocm/bin/rocm-smi --clearmem
 ```
+- **Summary:** These commands display current GPU memory usage and clear the GPU memory, aiding in memory management and troubleshooting.
 
 **Logs and Health:**
 
@@ -359,12 +369,14 @@ sudo /opt/rocm/bin/rocm-smi --setpoweroverdrive 200 --device 0
 /opt/rocm/bin/rocm-smi --save <filename>
 /opt/rocm/bin/rocm-smi --clearlog
 ```
+- **Summary:** These commands show the health status of the GPU, save logs to a file, and clear existing logs, useful for diagnostics and maintenance.
 
 **Reset:**
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --reset
 ```
+- **Summary:** This command resets the GPU, which can be helpful for recovering from errors and ensuring the GPU is in a clean state.
 
 ### Development Tools
 
