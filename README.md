@@ -27,6 +27,11 @@ sudo apt update
 ```bash
 sudo apt install -y rocm-dev rocm-utils rocm-libs miopen-hip
 ```
+**Components**
+- rocm-dev: ROCm development package containing core libraries and tools.
+- rocm-utils: ROCm utility tools.
+- rocm-libs: ROCm core libraries.
+- miopen-hip: AMD's library for high-performance deep learning primitives on ROCm using HIP (Heterogeneous-Compute Interface for Portability).
 
 ### Monitoring and Managing GPU Usage
 
