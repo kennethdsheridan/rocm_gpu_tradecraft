@@ -604,14 +604,16 @@ Here is a summary of each element for clarity:
 
 **14. Using `rping` for RDMA Connectivity Testing:**
 
-    - **Server-side:**
+    **Server-side:**
       ```bash
       sudo rping -s -a <server_ip> -v -C 10
       ```
-    - **Client-side:**
+      
+    **Client-side:**
       ```bash
       sudo rping -c -a <server_ip> -v -C 10
       ```
+    
     - Purpose: Tests RDMA connectivity between server and client.
 
 **15. Configuring QoS for RDMA Traffic:**
