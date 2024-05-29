@@ -95,8 +95,43 @@ Welcome to the future folks...lets get started.
       - [Analyzing Bottlenecks](#analyzing-bottlenecks)
     - [Summary of Commands](#summary-of-commands)
 
+## Transitioning from Nvidia CUDA to AMD ROCm
 
-## ROCm Tradecraft for GPU Performance Tuning
+### CUDA vs ROCm General Terminology Concepts
+
+**CUDA (Nvidia)** | **ROCm (AMD)**        | **Description**
+------------------|-----------------------|--------------------------------------------------
+CUDA              | HIP                   | ROCm's Heterogeneous-Computing Interface for Portability (HIP)
+CUDA Toolkit      | ROCm Toolkit          | The software suite for developing applications for AMD GPUs
+cuBLAS            | rocBLAS               | Library for basic linear algebra subprograms
+cuDNN             | MIOpen                | Library for deep neural networks
+cuFFT             | rocFFT                | Library for Fast Fourier Transform operations
+cuRAND            | rocRAND               | Library for random number generation
+cuSPARSE          | rocSPARSE             | Library for sparse matrix operations
+nvprof            | rocprof               | Profiling tools for performance analysis
+Nsight Compute    | rocProfiler, CodeXL   | Tools for performance analysis and debugging
+Nsight Systems    | rocTracer             | Tools for system-wide tracing and performance optimization
+
+## Programming Concepts
+
+### CUDA vs ROCm
+
+**CUDA (Nvidia)** | **ROCm (AMD)**                                 | **Description**
+------------------|------------------------------------------------|-----------------------------------------------
+__global__        | __global__                                     | Qualifier to define a kernel function
+__device__        | __device__                                     | Qualifier for functions executed on the device
+__host__          | __host__                                       | Qualifier for functions executed on the host
+__shared__        | __shared__                                     | Qualifier for shared memory
+__constant__      | __constant__                                   | Qualifier for constant memory
+threadIdx         | hipThreadIdx_x, hipThreadIdx_y, hipThreadIdx_z | Variable for thread indices within a block
+blockIdx          | hipBlockIdx_x, hipBlockIdx_y, hipBlockIdx_z    | Variable for block indices within a grid
+blockDim          | hipBlockDim_x, hipBlockDim_y, hipBlockDim_z    | Variable for block dimensions
+gridDim           | hipGridDim_x, hipGridDim_y, hipGridDim_z       | Variable for grid dimensions
+cudaMalloc        | hipMalloc                                      | Function to allocate device memory
+cudaFree          | hipFree                                        | Function to free device memory
+cudaMemcpy        | hipMemcpy                                      | Function to copy memory between host and device
+
+
 
 ### System Setup and Installation
 
@@ -378,58 +413,7 @@ sudo /opt/rocm/bin/rocm-smi --reset
 ```
 - **Summary:** This command resets the GPU, which can be helpful for recovering from errors and ensuring the GPU is in a clean state.
 
-### Development Tools
 
-**Installing HIP (Heterogeneous-Compute Interface for Portability):**
-
-```bash
-sudo apt install -y hip-base
-```
-
-**Compiling HIP Programs:**
-
-```bash
-hipcc my_program.cpp -o my_program
-```
-
-**Running HIP Programs:**
-
-```bash
-./my_program
-```
-
-**Using ROCm Libraries (e.g., rocBLAS, rocFFT):**
-
-```bash
-sudo apt install -y rocblas rocfft
-```
-
-### Performance Tuning and Benchmarking
-
-**Installing ROCm Bandwidth Test:**
-
-```bash
-sudo apt install -y rocm-bandwidth-test
-```
-
-**Running Bandwidth Test:**
-
-```bash
-/opt/rocm/bin/rocm-bandwidth-test
-```
-
-**Using rocprof for Profiling:**
-
-```bash
-sudo apt install -y rocprof
-rocprof --hip-trace ./my_program
-```
-
-**Using rocminfo for System Information:**
-
-```bash
-/opt/rocm/bin/rocminfo
-```
 
 ### RoCE (RDMA over Converged Ethernet) and GPU Network Fabrics
 
