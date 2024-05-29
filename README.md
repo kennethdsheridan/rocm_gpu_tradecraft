@@ -33,13 +33,13 @@ Welcome to the future of parallel programming. Let's get started with ROCm and u
 
 ## Table of Contents
 
-- [Radeon Open Compute GPU Tradecrafts](#radeon-open-compute-gpu-tradecrafts)
-  - [Transitioning from Nvidia CUDA to AMD ROCm](#transitioning-from-nvidia-cuda-to-amd-rocm)
-    - [Hardware Concepts](#hardware-concepts)
-    - [CUDA vs ROCm General Terminology Concepts](#cuda-vs-rocm-general-terminology-concepts)
+- [Transitioning from Nvidia CUDA to AMD ROCm](#transitioning-from-nvidia-cuda-to-amd-rocm)
+  - [Hardware Concepts](#hardware-concepts)
+  - [CUDA vs ROCm General Terminology Concepts](#cuda-vs-rocm-general-terminology-concepts)
   - [Programming Concepts](#programming-concepts)
-    - [CUDA vs ROCm](#cuda-vs-rocm)
-  - [Advanced Computational Infrastructure Engineering -- For Everyone](#advanced-computational-infrastructure-engineering--for-everyone)
+    - [CUDA vs ROCm](#cuda-vs-rocm-1)
+- [Radeon Open Compute GPU Tradecrafts](#radeon-open-compute-gpu-tradecrafts)
+  - [Advanced Computational Infrastructure Engineering -- For Everyone](#advanced-computational-infrastructure-engineering-for-everyone)
     - [System Setup and Installation](#system-setup-and-installation)
       - [Installing ROCm](#installing-rocm)
       - [Adding ROCm Repository](#adding-rocm-repository)
@@ -111,7 +111,7 @@ Welcome to the future of parallel programming. Let's get started with ROCm and u
       - [Installing Required Tools](#installing-required-tools)
       - [Basic Performance Testing](#basic-performance-testing)
       - [Profiling Applications with rocprof](#profiling-applications-with-rocprof)
-      - [Using rocminfo for System Information](#using-rocminfo-for-system-information)
+      - [Using rocminfo for System Information](#using-rocminfo-for-system-information-1)
       - [RDMA and RoCE Performance Testing](#rdma-and-roce-performance-testing)
       - [Advanced Performance Benchmarking](#advanced-performance-benchmarking)
         - [Using rocblas-bench for BLAS Performance](#using-rocblas-bench-for-blas-performance)
@@ -127,7 +127,6 @@ Welcome to the future of parallel programming. Let's get started with ROCm and u
         - [Optimizing Data Transfers](#optimizing-data-transfers)
         - [Analyzing Bottlenecks](#analyzing-bottlenecks)
       - [Summary of Commands](#summary-of-commands)
-  
       
 ## Transitioning from Nvidia CUDA to AMD ROCm
 
