@@ -97,6 +97,20 @@ Welcome to the future folks...lets get started.
 
 ## Transitioning from Nvidia CUDA to AMD ROCm
 
+### Hardware Concepts
+
+**CUDA (Nvidia)**   | **ROCm (AMD)**       | **Description**
+--------------------|----------------------|---------------------------------------------------
+Nvidia GPU          | AMD GPU              | Graphics Processing Unit (GPU) for parallel processing
+Tensor Cores        | Matrix Cores         | Specialized cores for deep learning operations
+NVLink              | Infinity Fabric      | High-bandwidth interconnect for communication between GPUs
+CUDA Cores          | Stream Processors    | Fundamental processing units in the GPU
+SM (Streaming Multiprocessor) | CU (Compute Unit)   | Hardware block containing multiple processing units
+Warp                | Wavefront            | A group of threads executed in lock-step
+Unified Memory      | Unified Address Space| Memory management allowing shared address space between CPU and GPU
+nvcc (CUDA Compiler)| hipcc (HIP Compiler) | Compiler for converting code into executable for the GPU
+CUDA Driver         | ROCm Driver          | Software component to manage GPU resources and execution
+
 ### CUDA vs ROCm General Terminology Concepts
 
 **CUDA (Nvidia)** | **ROCm (AMD)**        | **Description**
@@ -130,8 +144,6 @@ gridDim           | hipGridDim_x, hipGridDim_y, hipGridDim_z       | Variable fo
 cudaMalloc        | hipMalloc                                      | Function to allocate device memory
 cudaFree          | hipFree                                        | Function to free device memory
 cudaMemcpy        | hipMemcpy                                      | Function to copy memory between host and device
-
-
 
 ### System Setup and Installation
 
