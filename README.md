@@ -3,6 +3,99 @@ This is a collection of Radeon Open Compute (ROCm) commnds, best practices and w
 
 Welcome to the future folks...lets get started.
 
+## Table of Contents
+
+- [Radeon Open Compute Tradecraft](#radeon-open-compute-tradecraft)
+  - [ROCm Tradecraft for GPU Performance Tuning](#rocm-tradecraft-for-gpu-performance-tuning)
+    - [System Setup and Installation](#system-setup-and-installation)
+      - [Installing ROCm](#installing-rocm)
+      - [Adding ROCm Repository](#adding-rocm-repository)
+      - [Installing ROCm Components](#installing-rocm-components)
+  - [ROCm Component Packages](#rocm-component-packages)
+    - [rocm-dev](#rocm-dev)
+    - [rocm-utils](#rocm-utils)
+    - [rocm-libs](#rocm-libs)
+    - [miopen-hip](#miopen-hip)
+  - [Monitoring and Managing GPU Usage](#monitoring-and-managing-gpu-usage)
+    - [Listing Available GPUs](#listing-available-gpus)
+    - [Monitoring GPU Utilization](#monitoring-gpu-utilization)
+    - [Checking GPU Temperature](#checking-gpu-temperature)
+    - [Checking GPU Power Consumption](#checking-gpu-power-consumption)
+    - [Checking GPU Fan Speed](#checking-gpu-fan-speed)
+    - [Checking GPU Clock Frequencies](#checking-gpu-clock-frequencies)
+  - [GPU Performance Tuning](#gpu-performance-tuning)
+    - [Setting GPU Power Profile](#setting-gpu-power-profile)
+    - [Setting GPU Fan Speed](#setting-gpu-fan-speed)
+    - [Setting GPU Memory Clock](#setting-gpu-memory-clock)
+    - [Setting GPU Performance Level](#setting-gpu-performance-level)
+  - [Diagnostics and Debugging](#diagnostics-and-debugging)
+    - [Checking GPU Health](#checking-gpu-health)
+    - [Resetting GPU](#resetting-gpu)
+    - [Saving GPU Logs](#saving-gpu-logs)
+    - [Clearing GPU Logs](#clearing-gpu-logs)
+  - [GPU Memory Management](#gpu-memory-management)
+    - [Checking GPU Memory Usage](#checking-gpu-memory-usage)
+    - [Clearing GPU Memory](#clearing-gpu-memory)
+  - [Advanced GPU Configuration](#advanced-gpu-configuration)
+    - [Overclocking GPU](#overclocking-gpu)
+    - [Underclocking GPU](#underclocking-gpu)
+    - [Setting Power Cap](#setting-power-cap)
+  - [ROCm-SMI Commands Summary](#rocm-smi-commands-summary)
+    - [General Information](#general-information)
+    - [Temperature and Fan](#temperature-and-fan)
+    - [Power and Performance](#power-and-performance)
+    - [Clock Speeds](#clock-speeds)
+    - [Memory](#memory)
+    - [Logs and Health](#logs-and-health)
+    - [Reset](#reset)
+  - [Development Tools](#development-tools)
+    - [Installing HIP](#installing-hip)
+    - [Compiling HIP Programs](#compiling-hip-programs)
+    - [Running HIP Programs](#running-hip-programs)
+    - [Using ROCm Libraries](#using-rocm-libraries)
+  - [Performance Tuning and Benchmarking](#performance-tuning-and-benchmarking)
+    - [Installing ROCm Bandwidth Test](#installing-rocm-bandwidth-test)
+    - [Running Bandwidth Test](#running-bandwidth-test)
+    - [Using rocprof for Profiling](#using-rocprof-for-profiling)
+    - [Using rocminfo for System Information](#using-rocminfo-for-system-information)
+  - [RoCE and GPU Network Fabrics](#roce-and-gpu-network-fabrics)
+    - [Installing RDMA Tools](#installing-rdma-tools)
+    - [Configuring RoCE](#configuring-roce)
+    - [Checking RDMA Devices](#checking-rdma-devices)
+    - [Displaying RDMA Configuration](#displaying-rdma-configuration)
+    - [Setting Up RDMA Over TCP/IP](#setting-up-rdma-over-tcpip)
+    - [Listing RDMA Interfaces](#listing-rdma-interfaces)
+    - [Running RDMA Bandwidth Test](#running-rdma-bandwidth-test)
+    - [RDMA Latency Test](#rdma-latency-test)
+    - [Connecting RDMA Devices](#connecting-rdma-devices)
+    - [Using rping for RDMA Connectivity Testing](#using-rping-for-rdma-connectivity-testing)
+      - [Server-side](#server-side)
+      - [Client-side](#client-side)
+    - [Configuring QoS for RDMA Traffic](#configuring-qos-for-rdma-traffic)
+    - [Setting up RDMA Multicast](#setting-up-rdma-multicast)
+    - [Monitoring RDMA Traffic](#monitoring-rdma-traffic)
+  - [Performance and Benchmarking Cookbook Using ROCm, RDMA, and RoCE](#performance-and-benchmarking-cookbook-using-rocm-rdma-and-roce)
+    - [Installing Required Tools](#installing-required-tools)
+    - [Basic Performance Testing](#basic-performance-testing)
+    - [Profiling Applications with rocprof](#profiling-applications-with-rocprof)
+    - [Using rocminfo for System Information](#using-rocminfo-for-system-information)
+    - [RDMA and RoCE Performance Testing](#rdma-and-roce-performance-testing)
+    - [Advanced Performance Benchmarking](#advanced-performance-benchmarking)
+      - [Using rocblas-bench for BLAS Performance](#using-rocblas-bench-for-blas-performance)
+      - [Using rocFFT for FFT Performance](#using-rocfft-for-fft-performance)
+      - [Using RVS (ROCm Validation Suite)](#using-rvs-rocm-validation-suite)
+        - [Example Configuration for RVS Stress Test](#example-configuration-for-rvs-stress-test)
+        - [Running the Stress Test](#running-the-stress-test)
+    - [Custom Performance Scripts](#custom-performance-scripts)
+      - [Writing a Custom Benchmark Script](#writing-a-custom-benchmark-script)
+      - [Running the Custom Script](#running-the-custom-script)
+    - [Performance Optimization Tips](#performance-optimization-tips)
+      - [Optimizing Kernel Execution](#optimizing-kernel-execution)
+      - [Optimizing Data Transfers](#optimizing-data-transfers)
+      - [Analyzing Bottlenecks](#analyzing-bottlenecks)
+    - [Summary of Commands](#summary-of-commands)
+
+
 ## ROCm Tradecraft for GPU Performance Tuning
 
 ### System Setup and Installation
@@ -27,8 +120,6 @@ sudo apt update
 ```bash
 sudo apt install -y rocm-dev rocm-utils rocm-libs miopen-hip
 ```
-
-Here's a summary of each package for installing ROCm components and the commands for monitoring and managing GPU usage in Markdown format:
 
 ## ROCm Component Packages
 
@@ -98,35 +189,67 @@ To check the clock frequencies of the GPUs:
 /opt/rocm/bin/rocm-smi --showclk
 ```
 
-These tools and commands help in effectively managing and monitoring GPU resources when using ROCm on AMD hardware.
+## GPU Performance Tuning
 
+### Setting GPU Power Profile
 
-
-### Performance Tuning
-
-**Setting GPU Power Profile:**
+To set the power profile of a GPU:
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setsclk 4 --device 0
 ```
 
-**Setting GPU Fan Speed:**
+- **Description**: Sets the GPU power profile to a specific state.
+- **Example**: `--setsclk 4` sets the GPU's power state to level 4.
+- **Device**: `--device 0` specifies the target GPU (device 0).
+- **Real-World Reasons**:
+  - **Energy Efficiency**: Reduce power consumption and heat output in low-demand scenarios.
+  - **Performance Tuning**: Increase power limits for high-performance tasks like deep learning model training.
+
+### Setting GPU Fan Speed
+
+To set the fan speed of a GPU:
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setfan 100 --device 0
 ```
 
-**Setting GPU Memory Clock:**
+- **Description**: Sets the GPU fan speed to a specific percentage.
+- **Example**: `--setfan 100` sets the fan speed to 100% (full speed).
+- **Device**: `--device 0` specifies the target GPU (device 0).
+- **Real-World Reasons**:
+  - **Overheating Prevention**: Increase fan speed during intensive tasks to prevent overheating.
+  - **Noise Management**: Lower fan speed in less demanding scenarios to reduce noise in quiet environments.
+
+### Setting GPU Memory Clock
+
+To set the memory clock speed of a GPU:
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setmclk 2 --device 0
 ```
 
-**Setting GPU Performance Level:**
+- **Description**: Sets the memory clock speed of the GPU to a specific level.
+- **Example**: `--setmclk 2` sets the memory clock to level 2.
+- **Device**: `--device 0` specifies the target GPU (device 0).
+- **Real-World Reasons**:
+  - **Performance Optimization**: Increase memory clock speed to boost performance in memory-intensive applications.
+  - **Power Saving**: Reduce memory clock speed when high performance is not required to save energy.
+
+### Setting GPU Performance Level
+
+To set the performance level of a GPU:
 
 ```bash
 sudo /opt/rocm/bin/rocm-smi --setperflevel high --device 0
 ```
+
+- **Description**: Sets the GPU performance level.
+- **Example**: `--setperflevel high` sets the performance level to high.
+- **Device**: `--device 0` specifies the target GPU (device 0).
+- **Real-World Reasons**:
+  - **High Performance**: Set to high performance for demanding tasks like real-time rendering or complex simulations.
+  - **Balanced Mode**: Use balanced performance levels to maintain a balance between performance and power consumption for typical workloads.
 
 ### Diagnostics and Debugging
 
