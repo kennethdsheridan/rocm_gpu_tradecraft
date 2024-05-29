@@ -426,435 +426,295 @@ sudo /opt/rocm/bin/rocm-smi --reset
 - **Summary:** This command resets the GPU, which can be helpful for recovering from errors and ensuring the GPU is in a clean state.
 
 
+Here is a summary of each element for clarity:
 
-### RoCE (RDMA over Converged Ethernet) and GPU Network Fabrics
+## RoCE (RDMA over Converged Ethernet) and GPU Network Fabrics
 
-**Installing RDMA Tools:**
+**1. Installing RDMA Tools:**
+   - Command: `sudo apt install -y rdma-core`
+   - Purpose: Installs the essential RDMA tools and libraries.
 
-```bash
-sudo apt install -y rdma-core
-```
+**2. Configuring RoCE:**
+   - Commands:
+     ```bash
+     sudo modprobe mlx4_ib
+     sudo modprobe rdma_ucm
+     sudo modprobe ib_ipoib
+     ```
+   - Purpose: Loads the necessary kernel modules for RDMA functionality.
 
-**Configuring RoCE:**
+**3. Checking RDMA Devices:**
+   - Command: `ibv_devices`
+   - Purpose: Lists the available RDMA devices on the system.
 
-```bash
-sudo modprobe mlx4_ib
-sudo modprobe rdma_ucm
-sudo modprobe ib_ipoib
-```
+**4. Displaying RDMA Configuration:**
+   - Command: `ibv_devinfo`
+   - Purpose: Displays detailed information about RDMA devices.
 
-**Checking RDMA Devices:**
+**5. Setting Up RDMA Over TCP/IP:**
+   - Command: `sudo rdma link add rxe0 type rxe netdev eth0`
+   - Purpose: Configures RDMA over TCP/IP using the specified network interface.
 
-```bash
-ibv_devices
-```
+**6. Listing RDMA Interfaces:**
+   - Command: `rdma link show`
+   - Purpose: Lists the configured RDMA interfaces.
 
-**Displaying RDMA Configuration:**
+**7. Running RDMA Bandwidth Test:**
+   - Command: `ib_send_bw -d mlx5_0 -i 1`
+   - Purpose: Measures the bandwidth performance of the RDMA device.
 
-```bash
-ibv_devinfo
-```
+**8. RDMA Latency Test:**
+   - Command: `ib_send_lat -d mlx5_0 -i 1`
+   - Purpose: Measures the latency of the RDMA device.
 
-**Setting Up RDMA Over TCP/IP:**
+**9. Connecting RDMA Devices:**
+   - Commands:
+     ```bash
+     rdma resource show qp
+     rdma resource show pd
+     ```
+   - Purpose: Displays RDMA resources such as queue pairs and protection domains.
 
-```bash
-sudo rdma link add rxe0 type rxe netdev eth0
-```
+**10. Using rping for RDMA Connectivity Testing:**
 
-**Listing RDMA Interfaces:**
+   - **Server-side:**
+     ```bash
+     sudo rping -s -a <server_ip> -v -C 10
+     ```
+   - **Client-side:**
+     ```bash
+     sudo rping -c -a <server_ip> -v -C 10
+     ```
+   - Purpose: Tests RDMA connectivity between server and client.
 
-```bash
-rdma link show
-```
+**11. Configuring QoS for RDMA Traffic:**
+   - Commands:
+     ```bash
+     sudo tc qdisc add dev eth0 root handle 1: htb default 10
+     sudo tc class add dev eth0 parent 1:1 classid 1:10 htb rate 10Gbit
+     sudo tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip dport 4791 0xffff flowid 1:10
+     ```
+   - Purpose: Sets up Quality of Service (QoS) to prioritize RDMA traffic.
 
-**Running RDMA Bandwidth Test:**
+**12. Setting up RDMA Multicast:**
+   - Command: `sudo ib_mcjoin -v <multicast_group>`
+   - Purpose: Joins an RDMA multicast group.
 
-```bash
-ib_send_bw -d mlx5_0 -i 1
-```
+**13. Monitoring RDMA Traffic:**
+   - Command: `sudo perfquery -a`
+   - Purpose: Monitors the performance and statistics of RDMA traffic.## Performance and Benchmarking Cookbook Using ROCm, RDMA, and RoCE
 
-**RDMA Latency Test:**
-```bash
-ib_send_lat -d mlx5_0 -i 1
-```
+## Basic Performance Benchmarking and Stress Testing
 
-**Connecting RDMA Devices:**
-```bash
-rdma resource show qp
-rdma resource show pd
-Using rping for RDMA Connectivity Testing:
-```
+**1. Installing ROCm and Performance Tools:**
+   - Commands:
+     ```bash
+     sudo apt update
+     sudo apt install -y rocm-dkms rocm-utils rocm-libs rocm-bandwidth-test rocprof rdma-core
+     ```
+   - Purpose: Installs ROCm (Radeon Open Compute) and associated performance tools.
 
-**Server-side:**
-```bash
+**2. Running ROCm Bandwidth Test:**
+   - Command: `/opt/rocm/bin/rocm-bandwidth-test`
+   - Purpose: Measures the bandwidth performance of GPU memory transfers.
 
-Copy code
-sudo rping -s -a <server_ip> -v -C 10
-```
-
-**Client-side:**
-```bash
-Copy code
-sudo rping -c -a <server_ip> -v -C 10
-```
-
-**Configuring QoS for RDMA Traffic:**
-```bash
-sudo tc qdisc add dev eth0 root handle 1: htb default 10
-sudo tc class add dev eth0 parent 1:1 classid 1:10 htb rate 10Gbit
-sudo tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip dport 4791 0xffff flowid 1:10
-```
-
-**Setting up RDMA Multicast:**
-```bash
-sudo ib_mcjoin -v <multicast_group>
-```
-
-**Monitoring RDMA Traffic:**
-```bash
-sudo perfquery -a
-```
-
-## Performance and Benchmarking Cookbook Using ROCm, RDMA, and RoCE
-
-### Installing Required Tools
-
-**Installing ROCm and Performance Tools:**
-
-```bash
-sudo apt update
-sudo apt install -y rocm-dkms rocm-utils rocm-libs rocm-bandwidth-test rocprof rdma-core
-```
-
-### Basic Performance Testing
-
-**Running ROCm Bandwidth Test:**
-
-```bash
-/opt/rocm/bin/rocm-bandwidth-test
-```
-
-**Interpreting Bandwidth Test Results:**
-
-- The output will display various bandwidth metrics for device-to-device, host-to-device, and device-to-host transfers.
-- Look for metrics like `Peak Bandwidth` to understand the data transfer capabilities of your system.
+**3. Interpreting Bandwidth Test Results:**
+   - Key Metrics: `Peak Bandwidth`
+   - Purpose: Understands the data transfer capabilities of the system by reviewing various bandwidth metrics for device-to-device, host-to-device, and device-to-host transfers.
 
 ### Profiling Applications with rocprof
 
-**Profiling a HIP Program:**
+**4. Profiling a HIP Program:**
+   - Command: `rocprof --hip-trace ./my_program`
+   - Purpose: Profiles a HIP (Heterogeneous-Compute Interface for Portability) program to gather performance data.
 
-```bash
-rocprof --hip-trace ./my_program
-```
+**5. Generating a Profile Report:**
+   - Command: `rocprof --hsa-trace ./my_program`
+   - Purpose: Generates a profile report with detailed tracing of HSA (Heterogeneous System Architecture) activities.
 
-**Generating a Profile Report:**
-
-```bash
-rocprof --hsa-trace ./my_program
-```
-
-**Analyzing Profile Data:**
-
-- Use `rocprof` output to analyze kernel execution times, memory transfer times, and other performance metrics.
-- Look for bottlenecks in kernel execution or data transfers.
+**6. Analyzing Profile Data:**
+   - Purpose: Analyzes `rocprof` output to identify kernel execution times, memory transfer times, and other performance metrics to find bottlenecks.
 
 ### Using rocminfo for System Information
 
-**Checking System Information:**
-
-```bash
-/opt/rocm/bin/rocminfo
-```
-
-- This provides detailed information about the GPUs in your system, including device IDs, memory sizes, and supported features.
+**7. Checking System Information:**
+   - Command: `/opt/rocm/bin/rocminfo`
+   - Purpose: Provides detailed information about the GPUs in the system, including device IDs, memory sizes, and supported features.
 
 ### RDMA and RoCE Performance Testing
 
-**Configuring RoCE:**
+**8. Configuring RoCE:**
+   - Commands:
+     ```bash
+     sudo modprobe mlx4_ib
+     sudo modprobe rdma_ucm
+     sudo modprobe ib_ipoib
+     ```
+   - Purpose: Loads the necessary kernel modules for RDMA over Converged Ethernet (RoCE) functionality.
 
-```bash
-sudo modprobe mlx4_ib
-sudo modprobe rdma_ucm
-sudo modprobe ib_ipoib
-```
+**9. Setting Up RDMA Over TCP/IP:**
+   - Commands:
+     ```bash
+     sudo rdma link add rxe0 type rxe netdev eth0
+     sudo ip link set rxe0 up
+     ```
+   - Purpose: Configures RDMA over TCP/IP using the specified network interface and brings it up.
 
-**Setting Up RDMA Over TCP/IP:**
+**10. Checking RDMA Devices:**
+    - Command: `ibv_devices`
+    - Purpose: Lists the available RDMA devices on the system.
 
-```bash
-sudo rdma link add rxe0 type rxe netdev eth0
-sudo ip link set rxe0 up
-```
+**11. Displaying RDMA Configuration:**
+    - Command: `ibv_devinfo`
+    - Purpose: Displays detailed information about RDMA devices.
 
-**Checking RDMA Devices:**
+**12. Running RDMA Bandwidth Test:**
+    - Command: `ib_send_bw -d mlx5_0 -I 1`
+    - Purpose: Measures the bandwidth performance of the RDMA device.
 
-```bash
-ibv_devices
-```
+**13. RDMA Latency Test:**
+    - Command: `ib_send_lat -d mlx5_0 -I 1`
+    - Purpose: Measures the latency of the RDMA device.
 
-**Displaying RDMA Configuration:**
+**14. Using `rping` for RDMA Connectivity Testing:**
 
-```bash
-ibv_devinfo
-```
+    - **Server-side:**
+      ```bash
+      sudo rping -s -a <server_ip> -v -C 10
+      ```
+    - **Client-side:**
+      ```bash
+      sudo rping -c -a <server_ip> -v -C 10
+      ```
+    - Purpose: Tests RDMA connectivity between server and client.
 
-**Running RDMA Bandwidth Test:**
+**15. Configuring QoS for RDMA Traffic:**
+    - Commands:
+      ```bash
+      sudo tc qdisc add dev eth0 root handle 1: htb default 10
+      sudo tc class add dev eth0 parent 1:1 classid 1:10 htb rate 10Gbit
+      sudo tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip dport 4791 0xffff flowid 1:10
+      ```
+    - Purpose: Sets up Quality of Service (QoS) to prioritize RDMA traffic.
 
-```bash
-ib_send_bw -d mlx5_0 -I 1
-```
+**16. Setting up RDMA Multicast:**
+    - Command: `sudo ib_mcjoin -v <multicast_group>`
+    - Purpose: Joins an RDMA multicast group.
 
-**RDMA Latency Test:**
+**17. Monitoring RDMA Traffic:**
+    - Command: `sudo perfquery -a`
+    - Purpose: Monitors the performance and statistics of RDMA traffic.
 
-```bash
-ib_send_lat -d mlx5_0 -I 1
-```
-
-**Using `rping` for RDMA Connectivity Testing:**
-
-**Server-side:**
-
-```bash
-sudo rping -s -a <server_ip> -v -C 10
-```
-
-**Client-side:**
-
-```bash
-sudo rping -c -a <server_ip> -v -C 10
-```
-
-**Configuring QoS for RDMA Traffic:**
-
-```bash
-sudo tc qdisc add dev eth0 root handle 1: htb default 10
-sudo tc class add dev eth0 parent 1:1 classid 1:10 htb rate 10Gbit
-sudo tc filter add dev eth0 protocol ip parent 1:0 prio 1 u32 match ip dport 4791 0xffff flowid 1:10
-```
-
-**Setting up RDMA Multicast:**
-
-```bash
-sudo ib_mcjoin -v <multicast_group>
-```
-
-**Monitoring RDMA Traffic:**
-
-```bash
-sudo perfquery -a
-```
 
 ### Advanced Performance Benchmarking
 
-**Using rocblas-bench for BLAS Performance:**
+**1. Using rocblas-bench for BLAS Performance**
 
 **Installing rocBLAS:**
-
-```bash
-sudo apt install -y rocblas
-```
+   - Command: `sudo apt install -y rocblas`
+   - Purpose: Installs the rocBLAS library for BLAS (Basic Linear Algebra Subprograms) operations.
 
 **Running rocblas-bench:**
-
-```bash
-rocblas-bench -f gemm -r f32_r -m 4096 -n 4096 -k 4096 --a_type f32_r --b_type f32_r --c_type f32_r --d_type f32_r --alpha 1 --beta 0
-```
-
-- This command benchmarks the General Matrix Multiply (GEMM) operation for single-precision floating-point numbers.
+   - Command:
+     ```bash
+     rocblas-bench -f gemm -r f32_r -m 4096 -n 4096 -k 4096 --a_type f32_r --b_type f32_r --c_type f32_r --d_type f32_r --alpha 1 --beta 0
+     ```
+   - Purpose: Benchmarks the General Matrix Multiply (GEMM) operation for single-precision floating-point numbers.
 
 ### Using rocFFT for FFT Performance
 
-**Installing rocFFT:**
-
-```bash
-sudo apt install -y rocfft
-```
+**2. Installing rocFFT:**
+   - Command: `sudo apt install -y rocfft`
+   - Purpose: Installs the rocFFT library for Fast Fourier Transform (FFT) operations.
 
 **Running rocFFT Benchmarks:**
-
-```bash
-/opt/rocm/bin/rocfft-bench -n 1000 -b 2048 -p single -t complex_forward
-```
-
-- This command benchmarks the FFT operation for single-precision complex numbers.
+   - Command:
+     ```bash
+     /opt/rocm/bin/rocfft-bench -n 1000 -b 2048 -p single -t complex_forward
+     ```
+   - Purpose: Benchmarks the FFT operation for single-precision complex numbers.
 
 ### Using RVS (ROCm Validation Suite)
 
-**Installing RVS:**
-
-```bash
-sudo apt install -y rocm-validation-suite
-```
+**3. Installing RVS:**
+   - Command: `sudo apt install -y rocm-validation-suite`
+   - Purpose: Installs the ROCm Validation Suite (RVS) for stress testing and validation.
 
 **Example Configuration for RVS Stress Test:**
 
 **Creating `stress.json`:**
-
-```json
-{
-  "stress": {
-    "device": ["all"],
-    "count": 1,
-    "duration": 5000,
-    "metrics": ["gpu_busy", "mem_busy"]
-  }
-}
-```
+   - Configuration:
+     ```json
+     {
+       "stress": {
+         "device": ["all"],
+         "count": 1,
+         "duration": 5000,
+         "metrics": ["gpu_busy", "mem_busy"]
+       }
+     }
+     ```
+   - Purpose: Specifies the stress test parameters for all available GPUs, running for 5000 milliseconds and measuring GPU and memory busy metrics.
 
 **Running the Stress Test:**
-
-```bash
-sudo rvs -c stress.json
-```
-
-- This command runs a stress test on all available GPUs for 5000 milliseconds and measures GPU and memory busy metrics.
+   - Command: `sudo rvs -c stress.json`
+   - Purpose: Executes a stress test based on the configuration in `stress.json`.
 
 ### Custom Performance Scripts
 
-**Writing a Custom Benchmark Script:**
+**4. Writing a Custom Benchmark Script:**
 
-**Example:**
+**Example Script:**
+   - Script:
+     ```bash
+     #!/bin/bash
 
-```bash
-#!/bin/bash
+     # Set environment variables for ROCm
+     export ROCM_PATH=/opt/rocm
+     export PATH=$ROCM_PATH/bin:$PATH
+     export LD_LIBRARY_PATH=$ROCM_PATH/lib:$LD_LIBRARY_PATH
 
-# Set environment variables for ROCm
-export ROCM_PATH=/opt/rocm
-export PATH=$ROCM_PATH/bin:$PATH
-export LD_LIBRARY_PATH=$ROCM_PATH/lib:$LD_LIBRARY_PATH
+     # Run rocminfo
+     echo "Running rocminfo..."
+     /opt/rocm/bin/rocminfo
 
-# Run rocminfo
-echo "Running rocminfo..."
-/opt/rocm/bin/rocminfo
+     # Run rocprof on a HIP program
+     echo "Profiling HIP program..."
+     rocprof --hip-trace ./my_program
 
-# Run rocprof on a HIP program
-echo "Profiling HIP program..."
-rocprof --hip-trace ./my_program
+     # Run rocBLAS benchmark
+     echo "Running rocBLAS GEMM benchmark..."
+     rocblas-bench -f gemm -r f32_r -m 4096 -n 4096 -k 4096 --a_type f32_r --b_type f32_r --c_type f32_r --d_type f32_r --alpha 1 --beta 0
 
-# Run rocBLAS benchmark
-echo "Running rocBLAS GEMM benchmark..."
-rocblas-bench -f gemm -r f32_r -m 4096 -n 4096 -k 4096 --a_type f32_r --b_type f32_r --c_type f32_r --d_type f32_r --alpha 1 --beta 0
+     # Run rocFFT benchmark
+     echo "Running rocFFT benchmark..."
+     /opt/rocm/bin/rocfft-bench -n 1000 -b 2048 -p single -t complex_forward
 
-# Run rocFFT benchmark
-echo "Running rocFFT benchmark..."
-/opt/rocm/bin/rocfft-bench -n 1000 -b 2048 -p single -t complex_forward
+     # Configure RDMA
+     echo "Configuring RDMA..."
+     sudo modprobe mlx4_ib
+     sudo modprobe rdma_ucm
+     sudo modprobe ib_ipoib
+     sudo rdma link add rxe0 type rxe netdev eth0
+     sudo ip link set rxe0 up
 
-# Configure RDMA
-echo "Configuring RDMA..."
-sudo modprobe mlx4_ib
-sudo modprobe rdma_ucm
-sudo modprobe ib_ipoib
-sudo rdma link add rxe0 type rxe netdev eth0
-sudo ip link set rxe0 up
+     # Run RDMA bandwidth test
+     echo "Running RDMA bandwidth test..."
+     ib_send_bw -d mlx5_0 -I 1
 
-# Run RDMA bandwidth test
-echo "Running RDMA bandwidth test..."
-ib_send_bw -d mlx5_0 -I 1
+     # Run RDMA latency test
+     echo "Running RDMA latency test..."
+     ib_send_lat -d mlx5_0 -I 1
 
-# Run RDMA latency test
-echo "Running RDMA latency test..."
-ib_send_lat -d mlx5_0 -I 1
-
-# Run RVS stress test
-echo "Running RVS stress test..."
-sudo rvs -c stress.json
-```
+     # Run RVS stress test
+     echo "Running RVS stress test..."
+     sudo rvs -c stress.json
+     ```
 
 **Running the Custom Script:**
-
-```bash
-chmod +x custom_benchmark.sh
-./custom_benchmark.sh
-```
-
-### Performance Optimization Tips
-
-**Optimizing Kernel Execution:**
-
-- Use the `__global__` and `__device__` qualifiers correctly to ensure that kernel functions are executed on the GPU.
-- Optimize memory access patterns to maximize memory bandwidth utilization.
-- Use shared memory and registers effectively to reduce global memory access latency.
-
-**Optimizing Data Transfers:**
-
-- Minimize data transfers between host and device to reduce overhead.
-- Use pinned (page-locked) memory for faster data transfers between host and device.
-
-**Analyzing Bottlenecks:**
-
-- Use profiling tools like `rocprof` to identify bottlenecks in kernel execution and data transfers.
-- Experiment with different kernel configurations and memory layouts to improve performance.
-
-### Summary of Commands
-
-**System Information:**
-
-```bash
-/opt/rocm/bin/rocminfo
-```
-
-**Bandwidth Test:**
-
-```bash
-/opt/rocm/bin/rocm-bandwidth-test
-```
-
-**Profiling:**
-
-```bash
-rocprof --hip-trace ./my_program
-```
-
-**rocBLAS Benchmark:**
-
-```bash
-rocblas-bench -f gemm -r f32_r -m 4096 -n 4096 -k 4096 --a_type f32_r --b_type f32_r --c_type f32_r --d_type f32_r --alpha 1 --beta 0
-```
-
-**rocFFT Benchmark:**
-
-```bash
-/opt/rocm/bin/rocfft-bench -n 1000 -b 2048 -p single -t complex_forward
-```
-
-**RVS Stress Test:**
-
-```bash
-sudo rvs -c stress.json
-```
-
-**RDMA Configuration:**
-
-```bash
-sudo modprobe mlx4_ib
-sudo modprobe rdma_ucm
-sudo modprobe ib_ipoib
-sudo rdma link add rxe0 type rxe netdev eth0
-sudo ip link set rxe0 up
-```
-
-**RDMA Bandwidth Test:**
-
-```bash
-ib_send_bw -d mlx5_0 -I 1
-```
-
-**RDMA Latency Test:**
-
-```bash
-ib_send_lat -d mlx5_0 -I 1
-```
-
-**RDMA Connectivity Testing with `rping`:**
-
-**Server-side:**
-
-```bash
-sudo rping -s -a <server_ip> -v -C 10
-```
-
-**Client-side:**
-
-```bash
-sudo rping -c -a <server_ip> -v -C 10
-```
-
+   - Commands:
+     ```bash
+     chmod +x custom_benchmark.sh
+     ./custom_benchmark.sh
+     ```
+   - Purpose: Grants execute permission to the custom script and runs it, executing a series of benchmarks and configurations.
