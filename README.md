@@ -1,4 +1,4 @@
-# ROCm Tradecraft
+# Radeon Open Compute Tradecraft
 This is a collection of Radeon Open Compute (ROCm) commnds, best practices and what not that will make you more confident with the AMD ROCm toolkit. And assist in transitioning from CUDA, over to a community driven parallel programming ecoystem you have control over. 
 
 Welcome to the future folks...lets get started.
@@ -27,49 +27,80 @@ sudo apt update
 ```bash
 sudo apt install -y rocm-dev rocm-utils rocm-libs miopen-hip
 ```
-**Components**
-- rocm-dev: ROCm development package containing core libraries and tools.
-- rocm-utils: ROCm utility tools.
-- rocm-libs: ROCm core libraries.
-- miopen-hip: AMD's library for high-performance deep learning primitives on ROCm using HIP (Heterogeneous-Compute Interface for Portability).
 
-### Monitoring and Managing GPU Usage
+Here's a summary of each package for installing ROCm components and the commands for monitoring and managing GPU usage in Markdown format:
 
-**Listing Available GPUs:**
+## ROCm Component Packages
+
+### rocm-dev
+- **Description**: Development package for ROCm, including compiler and libraries needed for developing applications.
+- **Components**: Includes the ROCm compiler, ROCm runtime, and various ROCm libraries for development.
+
+### rocm-utils
+- **Description**: Utility package for ROCm, providing tools for monitoring and managing ROCm-enabled devices.
+- **Components**: Contains utilities like `rocm-smi` for system management and monitoring of ROCm devices.
+
+### rocm-libs
+- **Description**: Library package for ROCm, providing essential libraries for ROCm applications.
+- **Components**: Includes libraries like ROCm Math Libraries (rocBLAS, rocFFT, rocSPARSE), ROCm Communication Libraries, and others necessary for running ROCm applications.
+
+### miopen-hip
+- **Description**: Machine Intelligence library for deep learning frameworks on ROCm, optimized for AMD GPUs.
+- **Components**: Includes MIOpen, a GPU-accelerated library providing highly optimized implementations of standard deep learning operations.
+
+## Monitoring and Managing GPU Usage
+
+### Listing Available GPUs
+
+To list all available GPUs:
 
 ```bash
 /opt/rocm/bin/rocm-smi
 ```
 
-**Monitoring GPU Utilization:**
+### Monitoring GPU Utilization
+
+To monitor GPU utilization in real-time:
 
 ```bash
 watch -n 1 /opt/rocm/bin/rocm-smi --showhw
 ```
 
-**Checking GPU Temperature:**
+### Checking GPU Temperature
+
+To check the current temperature of the GPUs:
 
 ```bash
 /opt/rocm/bin/rocm-smi --showtemp
 ```
 
-**Checking GPU Power Consumption:**
+### Checking GPU Power Consumption
+
+To check the power consumption of the GPUs:
 
 ```bash
 /opt/rocm/bin/rocm-smi --showpower
 ```
 
-**Checking GPU Fan Speed:**
+### Checking GPU Fan Speed
+
+To check the fan speed of the GPUs:
 
 ```bash
 /opt/rocm/bin/rocm-smi --showfan
 ```
 
-**Checking GPU Clock Frequencies:**
+### Checking GPU Clock Frequencies
+
+To check the clock frequencies of the GPUs:
 
 ```bash
 /opt/rocm/bin/rocm-smi --showclk
 ```
+
+These tools and commands help in effectively managing and monitoring GPU resources when using ROCm on AMD hardware.
+
+
 
 ### Performance Tuning
 
