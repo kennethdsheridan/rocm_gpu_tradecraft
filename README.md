@@ -1,6 +1,6 @@
 **Continously being improved**
 
-# ROCm GPU Tradecrafts
+# ROCm GPU Tradecraft
 
 This guide is designed for engineers and developers seeking to migrate from Nvidia's CUDA to the open, community-driven environment provided by ROCm. It offers a comprehensive collection of ROCm commands, best practices, and performance tuning techniques to help you become proficient with the AMD ROCm toolkit.
 
